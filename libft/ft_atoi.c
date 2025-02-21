@@ -6,13 +6,11 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:56:17 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/21 17:25:50 by mberila          ###   ########.fr       */
+/*   Updated: 2025/02/21 18:09:21 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-
 
 int	ft_atoi(const char *str)
 {

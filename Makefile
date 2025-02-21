@@ -17,9 +17,9 @@ BONUS_SRCS		=	bonus/client_bonus.c \
 OBJS			=	$(SRCS:.c=.o)
 BONUS_OBJS		=	$(BONUS_SRCS:.c=.o)
 
-all: $(LIBFT) $(SERVER_NAME) $(CLIENT_NAME)
+all: $(LIBFT_DIR) $(SERVER_NAME) $(CLIENT_NAME)
 
-$(LIBFT):
+$(LIBFT_DIR):
 	@make -C $(LIBFT_DIR)
 
 $(SERVER_NAME): $(OBJS)
@@ -28,7 +28,7 @@ $(SERVER_NAME): $(OBJS)
 $(CLIENT_NAME): $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBFT) -o $(CLIENT_NAME)
 
-bonus: $(LIBFT) $(SERVER_BONUS) $(CLIENT_BONUS)
+bonus: $(LIBFT_DIR) $(SERVER_BONUS) $(CLIENT_BONUS)
 
 $(SERVER_BONUS): $(BONUS_OBJS)
 	$(CC) $(FLAGS) $(BONUS_OBJS) $(LIBFT) -o $(SERVER_BONUS)
@@ -53,4 +53,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: $(LIBFT_DIR)

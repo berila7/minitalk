@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 10:40:38 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/21 17:26:28 by mberila          ###   ########.fr       */
+/*   Updated: 2025/02/21 18:05:12 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,6 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }			t_list;
-
-
-
-
 
 int		ft_isalpha(int c);
 void	*ft_calloc(size_t count, size_t size);
