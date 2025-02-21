@@ -1,5 +1,7 @@
 SERVER_NAME		=	server
 CLIENT_NAME		=	client
+SERVER_BONUS	=	server_bonus
+CLIENT_BONUS	=	client_bonus
 
 CC				=	cc
 LIBFT_DIR		=	libft
@@ -15,7 +17,7 @@ BONUS_SRCS		=	bonus/client_bonus.c \
 OBJS			=	$(SRCS:.c=.o)
 BONUS_OBJS		=	$(BONUS_SRCS:.c=.o)
 
-all: $(LIBFT_DIR) $(SERVER_NAME) $(CLIENT_NAME)
+all: $(LIBFT) $(SERVER_NAME) $(CLIENT_NAME)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
@@ -26,7 +28,13 @@ $(SERVER_NAME): $(OBJS)
 $(CLIENT_NAME): $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBFT) -o $(CLIENT_NAME)
 
-bonus: $(LIBFT_DIR) $(SERVER_NAME) $(CLIENT_NAME)
+bonus: $(LIBFT) $(SERVER_BONUS) $(CLIENT_BONUS)
+
+$(SERVER_BONUS): $(BONUS_OBJS)
+	$(CC) $(FLAGS) $(BONUS_OBJS) $(LIBFT) -o $(SERVER_BONUS)
+
+$(CLIENT_BONUS): $(BONUS_OBJS)
+	$(CC) $(FLAGS) $(BONUS_OBJS) $(LIBFT) -o $(CLIENT_BONUS)
 
 mandatory/%.o: mandatory/%.c $(LIBFT) includes/minitalk.h
 	$(CC) $(FLAGS) -c $< -o $@
@@ -41,6 +49,7 @@ clean:
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean
 	rm -f $(CLIENT_NAME) $(SERVER_NAME)
+	rm -f $(CLIENT_BONUS) $(SERVER_BONUS)
 
 re: fclean all
 
