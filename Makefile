@@ -1,0 +1,2 @@
+NAMES = server
+NAMEC = client
