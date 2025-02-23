@@ -12,19 +12,37 @@
 
 #include "../includes/minitalk.h"
 
-void	send_char(int server_id, char c)
+void	send_char(int pid, char c)
 {
 	int bit;
 
 	bit = 0;
-	while (bit <= 7)
+	while (bit < 8)
 	{
 		if (c & (1 << bit))
-			kill(server_id, SIGUSR1);
+		{
+			if (kill(pid, SIGUSR1) == -1)
+				exit(1);
+		}
 		else
-			kill(server_id, SIGUSR2);
+		{
+			if (kill(pid, SIGUSR2) == -1)
+				exit(1);
+		}
 		usleep(50);
 		bit++;
+	}
+}
+
+static void	send_message(int pid, char *message)
+{
+	int i;
+
+	i = 0;
+	while (message[i])
+	{
+		send_char(pid, message[i]);
+		i++;
 	}
 }
 
@@ -32,22 +50,21 @@ void	send_char(int server_id, char c)
 
 int	main(int ac, char *av[])
 {
+	char *message;
+	int pid;
+
 	if (ac != 3)
 	{
 		 ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
 		return (1);
 	}
-	char *message;
-	int server_id;
-	int i;
-
 	message = av[2];
-	server_id = ft_atoi(av[1]);
-	i = 0;
-	while (message[i])
+	pid = ft_atoi(av[1]);
+	if (pid <= 0)
 	{
-		send_char(server_id, message[i]);
-		i++;
+		ft_printf("Error: Invalid PID\n");
+		return (1);
 	}
+	send_message(pid, message);
 	return (0);
 }
