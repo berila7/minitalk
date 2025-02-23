@@ -33,7 +33,7 @@ void handle_signal(int signum)
 
 int main(void)
 {
-	printf("Process ID: %d\n", getpid());
+	ft_printf("Process ID: %d\n", getpid());
 
 	signal(SIGUSR1, handle_signal);
 	signal(SIGUSR2, handle_signal);

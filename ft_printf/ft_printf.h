@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk_bonus.h                                   :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 12:08:48 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/21 12:08:58 by mberila          ###   ########.fr       */
+/*   Created: 2024/11/21 16:23:58 by mberila           #+#    #+#             */
+/*   Updated: 2024/11/26 10:36:42 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_BONUS_H
-# define MINITALK_BONUS_H
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+# include <stdarg.h>
+# include <unistd.h>
 
-#include <unistd.h>
-#include <signal.h>
-#include "../libft/libft.h"
-#include "../ft_printf/ft_printf.h"
+int	ft_putchar(char c);
+int	ft_printf(const char *str, ...);
+int	ft_putstr(char *str);
+int	ft_puthex_adr(size_t n, char sp);
+int	ft_putnbr(int n, int is_signed);
 
 #endif

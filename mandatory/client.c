@@ -23,7 +23,7 @@ void	send_char(int server_id, char c)
 			kill(server_id, SIGUSR1);
 		else
 			kill(server_id, SIGUSR2);
-		usleep(100);
+		usleep(50);
 		bit++;
 	}
 }
@@ -34,7 +34,7 @@ int	main(int ac, char *av[])
 {
 	if (ac != 3)
 	{
-		 printf("Usage: %s <server_pid> <message>\n", av[0]);
+		 ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
 		return (1);
 	}
 	char *message;

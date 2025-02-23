@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk_bonus.h                                   :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mberila <mberila@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 12:08:48 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/21 12:08:58 by mberila          ###   ########.fr       */
+/*   Created: 2024/11/21 14:58:51 by mberila           #+#    #+#             */
+/*   Updated: 2024/11/23 14:38:02 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_BONUS_H
-# define MINITALK_BONUS_H
+#include "ft_printf.h"
 
-#include <unistd.h>
-#include <signal.h>
-#include "../libft/libft.h"
-#include "../ft_printf/ft_printf.h"
-
-#endif
+int	ft_putchar(char c)
+{
+	return (write(1, &c, 1));
+}
