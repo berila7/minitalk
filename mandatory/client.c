@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:32 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/22 16:10:03 by mberila          ###   ########.fr       */
+/*   Updated: 2025/02/23 09:33:58 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@ void	send_char(int server_id, char c)
 {
 	int bit;
 
-	bit = 9;
-	while (bit--)
+	bit = 0;
+	while (bit <= 7)
 	{
 		if (c & (1 << bit))
 			kill(server_id, SIGUSR1);
 		else
 			kill(server_id, SIGUSR2);
 		usleep(100);
+		bit++;
 	}
 }
 
