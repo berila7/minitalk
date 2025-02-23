@@ -13,28 +13,28 @@
 #include "../includes/minitalk.h"
 
 // Global variables to store received bits and bit position
-static unsigned char received_char = 0;
-static int bit_position = 0;
+static t_data	g_data;
 
 void handle_signal(int signum)
 {
     if (signum == SIGUSR1)
-        received_char |= (1 << bit_position);
+        g_data.received_char |= (1 << g_data.bit_position);
 
-    bit_position++;
+		g_data.bit_position++;
 
-    if (bit_position == 8)
+    if (g_data.bit_position == 8)
     {
-        write(1, &received_char, 1);
-        received_char = 0;
-        bit_position = 0;
+        ft_putchar_fd(g_data.received_char, 1);
+        g_data.received_char = 0;
+        g_data.bit_position = 0;
     }
 }
 
 int main(void)
 {
+	g_data.received_char = 0;
+	g_data.bit_position = 0;
 	ft_printf("Process ID: %d\n", getpid());
-
 	signal(SIGUSR1, handle_signal);
 	signal(SIGUSR2, handle_signal);
 	while(1)

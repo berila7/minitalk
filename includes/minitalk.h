@@ -15,8 +15,16 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
 #include "../libft/libft.h"
 #include "../ft_printf/ft_printf.h"
+
+typedef struct s_data
+{
+	unsigned char	received_char;
+	int				bit_position;
+}	t_data;
+
 
 #endif
