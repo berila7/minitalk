@@ -18,6 +18,7 @@ static void	signal_handler(int signum)
 {
 	(void)signum;
 	g_received = 1;
+	ft_printf("Character received by server!\n");
 }
 
 static void	send_char(int pid, char c)
@@ -57,7 +58,9 @@ int	main(int ac, char **av)
 	}
 	signal(SIGUSR1, signal_handler);
 	i = 0;
+	ft_printf("Sending message to server...\n");
 	while (av[2][i])
 		send_char(pid, av[2][i++]);
+	ft_printf("\nComplete message sent successfully!\n");
 	return (0);
 }

@@ -23,6 +23,7 @@ static void	handle_signal(int signum, siginfo_t *info, void *context)
 	if (g_data.bits == 8)
 	{
 		ft_putchar_fd(g_data.c, 1);
+		ft_printf(" [Received from PID: %d]\n", info->si_pid);
 		kill(info->si_pid, SIGUSR1);
 		g_data.c = 0;
 		g_data.bits = 0;
@@ -35,7 +36,9 @@ int	main(void)
 
 	g_data.c = 0;
 	g_data.bits = 0;
+	ft_printf("\n=== Server Started ===\n");
 	ft_printf("Server PID: %d\n", getpid());
+	ft_printf("Waiting for messages...\n\n");
 	sa.sa_sigaction = handle_signal;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
