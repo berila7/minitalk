@@ -12,32 +12,36 @@
 
 #include "../includes/minitalk_bonus.h"
 
-// Global variables to store received bits and bit position
 static t_data	g_data;
 
-void handle_signal(int signum)
+static void	handle_signal(int signum, siginfo_t *info, void *context)
 {
-    if (signum == SIGUSR1)
-        g_data.received_char |= (1 << g_data.bit_position);
-
-		g_data.bit_position++;
-
-    if (g_data.bit_position == 8)
-    {
-        ft_putchar_fd(g_data.received_char, 1);
-        g_data.received_char = 0;
-        g_data.bit_position = 0;
-    }
+	(void)context;
+	if (signum == SIGUSR1)
+		g_data.c |= (1 << g_data.bits);
+	g_data.bits++;
+	if (g_data.bits == 8)
+	{
+		ft_putchar_fd(g_data.c, 1);
+		kill(info->si_pid, SIGUSR1);
+		g_data.c = 0;
+		g_data.bits = 0;
+	}
 }
 
-int main(void)
+int	main(void)
 {
-	g_data.received_char = 0;
-	g_data.bit_position = 0;
-	ft_printf("Process ID: %d\n", getpid());
-	signal(SIGUSR1, handle_signal);
-	signal(SIGUSR2, handle_signal);
-	while(1)
+	struct sigaction	sa;
+
+	g_data.c = 0;
+	g_data.bits = 0;
+	ft_printf("Server PID: %d\n", getpid());
+	sa.sa_sigaction = handle_signal;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	while (1)
 		pause();
 	return (0);
 }

@@ -12,59 +12,52 @@
 
 #include "../includes/minitalk_bonus.h"
 
-void	send_char(int pid, char c)
+static int	g_received;
+
+static void	signal_handler(int signum)
 {
-	int bit;
+	(void)signum;
+	g_received = 1;
+}
+
+static void	send_char(int pid, char c)
+{
+	int	bit;
 
 	bit = 0;
 	while (bit < 8)
 	{
+		g_received = 0;
 		if (c & (1 << bit))
-		{
-			if (kill(pid, SIGUSR1) == -1)
-				exit(1);
-		}
+			kill(pid, SIGUSR1);
 		else
-		{
-			if (kill(pid, SIGUSR2) == -1)
-				exit(1);
-		}
-		usleep(50);
+			kill(pid, SIGUSR2);
+		usleep(100);
 		bit++;
+		while (!g_received)
+			usleep(50);
 	}
 }
 
-static void	send_message(int pid, char *message)
+int	main(int ac, char **av)
 {
-	int i;
-
-	i = 0;
-	while (message[i])
-	{
-		send_char(pid, message[i]);
-		i++;
-	}
-}
-
-#include "../includes/minitalk.h"
-
-int	main(int ac, char *av[])
-{
-	char *message;
-	int pid;
+	int		i;
+	int		pid;
 
 	if (ac != 3)
 	{
-		 ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
+		ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
 		return (1);
 	}
-	message = av[2];
 	pid = ft_atoi(av[1]);
 	if (pid <= 0)
 	{
 		ft_printf("Error: Invalid PID\n");
 		return (1);
 	}
-	send_message(pid, message);
+	signal(SIGUSR1, signal_handler);
+	i = 0;
+	while (av[2][i])
+		send_char(pid, av[2][i++]);
 	return (0);
 }

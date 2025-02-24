@@ -20,8 +20,8 @@
 
 typedef struct s_data
 {
-	unsigned char	received_char;
-	int				bit_position;
+	unsigned char	c;
+	int				bits;
 }	t_data;
 
 #endif
