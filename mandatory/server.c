@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:45:41 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/22 16:03:47 by mberila          ###   ########.fr       */
+/*   Updated: 2025/02/24 13:54:00 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void handle_signal(int signum)
     if (signum == SIGUSR1)
         g_data.received_char |= (1 << g_data.bit_position);
 
-		g_data.bit_position++;
-
+	g_data.bit_position++;
     if (g_data.bit_position == 8)
     {
         ft_putchar_fd(g_data.received_char, 1);
