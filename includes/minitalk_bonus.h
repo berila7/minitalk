@@ -13,15 +13,16 @@
 #ifndef MINITALK_BONUS_H
 # define MINITALK_BONUS_H
 
-#include <unistd.h>
-#include <signal.h>
-#include "../libft/libft.h"
-#include "../ft_printf/ft_printf.h"
+# include <unistd.h>
+# include <signal.h>
+# include "../libft/libft.h"
+# include "../ft_printf/ft_printf.h"
 
 typedef struct s_data
 {
-	unsigned char	c;
+	unsigned int	c;
 	int				bits;
+	pid_t			client_pid;
 }	t_data;
 
 #endif
