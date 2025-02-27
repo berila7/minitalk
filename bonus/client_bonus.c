@@ -24,6 +24,7 @@ static void	handle_acknowledgment(int signum)
 static void	send_char(int pid, int c)
 {
 	int	bit;
+	int	timeout_counter;
 
 	bit = 0;
 	while (bit < 32)
@@ -39,20 +40,31 @@ static void	send_char(int pid, int c)
 			if (kill(pid, SIGUSR2) == -1)
 				exit(1);
 		}
-		usleep(100);
 		bit++;
+		// Wait a bit for server response with timeout
+		timeout_counter = 0;
+		while (!g_received && timeout_counter < 50)
+		{
+			usleep(100);
+			timeout_counter++;
+		}
+		// If no response after timeout, print warning but continue
+		if (!g_received && bit == 32)
+			ft_printf("Warning: No acknowledgment from server for this character\n");
 	}
-	while (!g_received)
-		usleep(100);
 }
 
 static void	send_message(int pid, char *message)
 {
+	ft_printf("Sending message to server...\n");
 	while (*message)
 	{
 		send_char(pid, *message);
 		message++;
 	}
+	// Send null terminator to properly end the message
+	send_char(pid, '\0');
+	ft_printf("Message transmission completed.\n");
 }
 
 int	main(int ac, char **av)
