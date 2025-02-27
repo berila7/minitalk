@@ -14,6 +14,29 @@
 
 static int	g_received = 0;
 
+static int	is_valid_pid(char *str)
+{
+	int	i;
+	int	pid;
+
+	i = 0;
+	// Check if the string contains only digits
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	// Check if the string is empty
+	if (i == 0)
+		return (0);
+	// Convert to integer and check if it's in a valid range
+	pid = ft_atoi(str);
+	if (pid <= 0 || pid > 99999)
+		return (0);
+	return (1);
+}
+
 static void	handle_acknowledgment(int signum)
 {
 	(void)signum;
@@ -44,14 +67,10 @@ static void	send_char(int pid, int c)
 				exit(1);
 			}
 		}
-		
-		// Wait for acknowledgment with a reasonable timeout
 		usleep(100);
 		
 		bit++;
 	}
-	
-	// Wait for final acknowledgment for this character
 	usleep(500);
 	if (!g_received)
 		ft_printf("Warning: No acknowledgment received from server\n");
@@ -83,23 +102,19 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	
+	if (!is_valid_pid(av[1]))
+	{
+		ft_printf("Error: Invalid PID format. PID must be a positive number.\n");
+		return (1);
+	}
 	sa.sa_handler = handle_acknowledgment;
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
-	
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 	{
 		ft_printf("Error setting up signal handler\n");
 		return (1);
 	}
-	
-	if (ft_atoi(av[1]) <= 0)
-	{
-		ft_printf("Error: Invalid PID\n");
-		return (1);
-	}
-	
 	send_message(ft_atoi(av[1]), av[2]);
-	
 	return (0);
 }

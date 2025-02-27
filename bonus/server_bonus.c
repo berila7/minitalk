@@ -69,11 +69,8 @@ int	main(void)
 	
 	ft_printf("Server PID: %d\n", getpid());
 	ft_printf("Server ready to receive messages...\n");
-	
 	setup_signals();
-	
 	while (1)
 		pause();
-	
 	return (0);
 }

@@ -12,6 +12,29 @@
 
 #include "../includes/minitalk.h"
 
+static int	is_valid_pid(char *str)
+{
+	int	i;
+	int	pid;
+
+	i = 0;
+	// Check if the string contains only digits
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	// Check if the string is empty
+	if (i == 0)
+		return (0);
+	// Convert to integer and check if it's in a valid range
+	pid = ft_atoi(str);
+	if (pid <= 0 || pid > 99999)
+		return (0);
+	return (1);
+}
+
 void	send_char(int pid, char c)
 {
 	int	bit;
@@ -64,13 +87,13 @@ int	main(int ac, char *av[])
 		ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
 		return (1);
 	}
-	message = av[2];
-	pid = ft_atoi(av[1]);
-	if (pid <= 0)
+	if (!is_valid_pid(av[1]))
 	{
-		ft_printf("Error: Invalid PID\n");
+		ft_printf("Error: Invalid PID format. PID must be a positive number.\n");
 		return (1);
 	}
+	message = av[2];
+	pid = ft_atoi(av[1]);
 	send_message(pid, message);
 	return (0);
 }
