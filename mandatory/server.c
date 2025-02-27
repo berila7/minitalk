@@ -15,28 +15,47 @@
 // Global variables to store received bits and bit position
 static t_data	g_data;
 
-void handle_signal(int signum)
+// Handle timeouts for interrupted transmissions
+static void	handle_timeout(int signum)
 {
-    if (signum == SIGUSR1)
-        g_data.received_char |= (1 << g_data.bit_position);
-
-	g_data.bit_position++;
-    if (g_data.bit_position == 8)
-    {
-        ft_putchar_fd(g_data.received_char, 1);
-        g_data.received_char = 0;
-        g_data.bit_position = 0;
-    }
+	(void)signum;
+	if (g_data.bit_position > 0)
+	{
+		ft_printf("\n[Reset] Incomplete transmission detected\n");
+		g_data.received_char = 0;
+		g_data.bit_position = 0;
+	}
 }
 
-int main(void)
+void	handle_signal(int signum)
+{
+	// Reset the timeout alarm each time we receive a bit
+	alarm(1);
+
+	if (signum == SIGUSR1)
+		g_data.received_char |= (1 << g_data.bit_position);
+
+	g_data.bit_position++;
+	if (g_data.bit_position == 8)
+	{
+		ft_putchar_fd(g_data.received_char, 1);
+		g_data.received_char = 0;
+		g_data.bit_position = 0;
+	}
+}
+
+int	main(void)
 {
 	g_data.received_char = 0;
 	g_data.bit_position = 0;
-	ft_printf("Process ID: %d\n", getpid());
+
+	// Set up signal handlers
 	signal(SIGUSR1, handle_signal);
 	signal(SIGUSR2, handle_signal);
-	while(1)
+	signal(SIGALRM, handle_timeout);
+
+	ft_printf("Server PID: %d\n", getpid());
+	while (1)
 		pause();
 	return (0);
 }
