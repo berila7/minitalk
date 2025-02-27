@@ -12,7 +12,6 @@
 
 #include "../includes/minitalk.h"
 
-// Global variables to store received bits and bit position
 static t_data	g_data;
 
 static void	handle_signal(int signum, siginfo_t *info, void *context)
@@ -38,12 +37,9 @@ int	main(void)
 
 	g_data.received_char = 0;
 	g_data.bit_position = 0;
-
-	// Set up signal handlers using sigaction (compliant with allowed functions)
 	sa.sa_sigaction = handle_signal;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
-	
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 	{
 		ft_printf("Error setting up signal handler\n");
@@ -54,7 +50,6 @@ int	main(void)
 		ft_printf("Error setting up signal handler\n");
 		return (1);
 	}
-
 	ft_printf("Server PID: %d\n", getpid());
 	while (1)
 		pause();

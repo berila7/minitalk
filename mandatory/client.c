@@ -18,17 +18,14 @@ static int	is_valid_pid(char *str)
 	int	pid;
 
 	i = 0;
-	// Check if the string contains only digits
 	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
 			return (0);
 		i++;
 	}
-	// Check if the string is empty
 	if (i == 0)
 		return (0);
-	// Convert to integer and check if it's in a valid range
 	pid = ft_atoi(str);
 	if (pid <= 0 || pid > 99999)
 		return (0);
@@ -58,7 +55,7 @@ void	send_char(int pid, char c)
 				exit(1);
 			}
 		}
-		usleep(100);  // Increased for reliability
+		usleep(100);
 		bit++;
 	}
 }
@@ -73,7 +70,6 @@ static void	send_message(int pid, char *message)
 		send_char(pid, message[i]);
 		i++;
 	}
-	// Send a newline character at the end for better output formatting
 	send_char(pid, '\n');
 }
 

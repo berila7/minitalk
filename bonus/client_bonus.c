@@ -20,17 +20,14 @@ static int	is_valid_pid(char *str)
 	int	pid;
 
 	i = 0;
-	// Check if the string contains only digits
 	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
 			return (0);
 		i++;
 	}
-	// Check if the string is empty
 	if (i == 0)
 		return (0);
-	// Convert to integer and check if it's in a valid range
 	pid = ft_atoi(str);
 	if (pid <= 0 || pid > 99999)
 		return (0);
@@ -43,6 +40,26 @@ static void	handle_acknowledgment(int signum)
 	g_received = 1;
 }
 
+static void	send_signal(int pid, int bit_value)
+{
+	if (bit_value)
+	{
+		if (kill(pid, SIGUSR1) == -1)
+		{
+			ft_printf("Error: Failed to send signal\n");
+			exit(1);
+		}
+	}
+	else
+	{
+		if (kill(pid, SIGUSR2) == -1)
+		{
+			ft_printf("Error: Failed to send signal\n");
+			exit(1);
+		}
+	}
+}
+
 static void	send_char(int pid, int c)
 {
 	int	bit;
@@ -51,24 +68,8 @@ static void	send_char(int pid, int c)
 	while (bit < 32)
 	{
 		g_received = 0;
-		if (c & (1 << bit))
-		{
-			if (kill(pid, SIGUSR1) == -1)
-			{
-				ft_printf("Error: Failed to send signal\n");
-				exit(1);
-			}
-		}
-		else
-		{
-			if (kill(pid, SIGUSR2) == -1)
-			{
-				ft_printf("Error: Failed to send signal\n");
-				exit(1);
-			}
-		}
+		send_signal(pid, c & (1 << bit));
 		usleep(100);
-		
 		bit++;
 	}
 	usleep(500);
@@ -79,16 +80,12 @@ static void	send_char(int pid, int c)
 static void	send_message(int pid, char *message)
 {
 	ft_printf("Sending message to server...\n");
-	
 	while (*message)
 	{
 		send_char(pid, *message);
 		message++;
 	}
-	
-	// Send null terminator to properly end the message
 	send_char(pid, '\0');
-	
 	ft_printf("Message transmission completed.\n");
 }
 
@@ -101,7 +98,6 @@ int	main(int ac, char **av)
 		ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
 		return (1);
 	}
-	
 	if (!is_valid_pid(av[1]))
 	{
 		ft_printf("Error: Invalid PID format. PID must be a positive number.\n");
