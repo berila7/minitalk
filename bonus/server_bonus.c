@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:09 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/24 13:09:19 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/04 15:04:45 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,27 @@ static void	handle_signal(int signum, siginfo_t *info, void *context)
 {
 	(void)context;
 	
-	g_data.client_pid = info->si_pid;
-	if (signum == SIGUSR1)
-		g_data.c |= (1 << g_data.bits);
-	g_data.bits++;
-	if (g_data.bits == 32)
+	if (g_data.pid == 0)
+		g_data.pid = info->si_pid;
+	if (info->si_pid != g_data.pid)
 	{
-		ft_putchar_fd(g_data.c, 1);
-		if (g_data.c == '\0')
+		g_data.pid = 0;
+		g_data.received_char = 0;
+		g_data.bit_position = 0;
+	}
+	if (signum == SIGUSR1)
+		g_data.received_char |= (1 << g_data.bit_position);
+	g_data.bit_position++;
+	if (g_data.bit_position == 32)
+	{
+		g_data.bit_position = 0;
+		if (g_data.received_char == '\0')
+		{
 			ft_putchar_fd('\n', 1);
-		if (kill(g_data.client_pid, SIGUSR1) == -1)
-			ft_printf("Error: Failed to send acknowledgment\n");
-		g_data.c = 0;
-		g_data.bits = 0;
+		}
+		ft_putchar_fd(g_data.received_char, 1);
+		kill(info->si_pid, SIGUSR1);
+		g_data.received_char = 0;
 	}
 }
 
@@ -40,7 +48,6 @@ static void	setup_signals(void)
 
 	sa.sa_sigaction = handle_signal;
 	sa.sa_flags = SA_SIGINFO;
-	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 	{
 		ft_printf("Error setting up signal handler\n");
@@ -55,11 +62,7 @@ static void	setup_signals(void)
 
 int	main(void)
 {
-	g_data.c = 0;
-	g_data.bits = 0;
-	g_data.client_pid = 0;
 	ft_printf("Server PID: %d\n", getpid());
-	ft_printf("Server ready to receive messages...\n");
 	setup_signals();
 	while (1)
 		pause();

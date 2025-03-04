@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:32 by mberila           #+#    #+#             */
-/*   Updated: 2025/02/23 09:33:58 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/04 14:45:38 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	send_char(int pid, char c)
 				exit(1);
 			}
 		}
-		usleep(100);
+		usleep(255);
 		bit++;
 	}
 }
@@ -68,15 +68,15 @@ static void	send_message(int pid, char *message)
 	while (message[i])
 	{
 		send_char(pid, message[i]);
+		usleep(50);
 		i++;
 	}
-	send_char(pid, '\n');
+	send_char(pid, '\0');
 }
 
 int	main(int ac, char *av[])
 {
 	char	*message;
-	int		pid;
 
 	if (ac != 3)
 	{
@@ -89,7 +89,6 @@ int	main(int ac, char *av[])
 		return (1);
 	}
 	message = av[2];
-	pid = ft_atoi(av[1]);
-	send_message(pid, message);
+	send_message(ft_atoi(av[1]), message);
 	return (0);
 }
