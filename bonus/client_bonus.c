@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:13 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/04 15:07:24 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/05 12:08:28 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,30 +47,24 @@ static void	send_char(int pid, int c)
 	int	bit;
 
 	bit = 0;
-	while (bit < 32)
+	while (bit < 8)
 	{
 		g_received = 0;
 		if (c & (1 << bit))
 		{
 			if (kill(pid, SIGUSR1) == -1)
-			{
-				ft_printf("Error: Failed to send signal\n");
 				exit(1);
-			}
 		}
 		else
 		{
 			if (kill(pid, SIGUSR2) == -1)
-			{
-				ft_printf("Error: Failed to send signal\n");
 				exit(1);
-			}
 		}
 		usleep(255);
 		bit++;
 	}
 	while (!g_received)
-		usleep(100);
+		usleep(50);
 }
 
 static void	send_message(int pid, char *message)
