@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:32 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/07 11:28:53 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/07 12:52:19 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	send_char(int pid, char c)
 		{
 			if (kill(pid, SIGUSR1) == -1)
 			{
-				ft_printf("Error: Failed to send signal\n");
+				ft_printf("\033[0;31mError: Failed to send signal\n");
 				exit(1);
 			}
 		}
@@ -51,7 +51,7 @@ void	send_char(int pid, char c)
 		{
 			if (kill(pid, SIGUSR2) == -1)
 			{
-				ft_printf("Error: Failed to send signal\n");
+				ft_printf("\033[0;31mError: Failed to send signal\n");
 				exit(1);
 			}
 		}
@@ -80,12 +80,12 @@ int	main(int ac, char *av[])
 
 	if (ac != 3)
 	{
-		ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
+		ft_printf("\033[0;31mUsage: %s <server_pid> <message>\n", av[0]);
 		return (1);
 	}
 	if (!is_valid_pid(av[1]))
 	{
-		ft_printf("Error: Invalid PID format.\n");
+		ft_printf("\033[0;31mError: Invalid PID format.\n");
 		return (1);
 	}
 	message = av[2];

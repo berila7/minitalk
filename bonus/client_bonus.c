@@ -6,13 +6,11 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:13 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/07 11:27:02 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/07 14:22:47 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk_bonus.h"
-
-static int	g_received = 0;
 
 static int	is_valid_pid(char *str)
 {
@@ -37,8 +35,7 @@ static int	is_valid_pid(char *str)
 static void	handle_acknowledgment(int signum)
 {
 	(void)signum;
-	g_received = 1;
-	ft_printf("Message received by server!\n");
+	ft_printf("\033[0;32mMessage received by server!\n");
 }
 
 static void	send_char(int pid, int c)
@@ -48,7 +45,6 @@ static void	send_char(int pid, int c)
 	bit = 0;
 	while (bit < 8)
 	{
-		g_received = 0;
 		if (c & (1 << bit))
 		{
 			if (kill(pid, SIGUSR1) == -1)
@@ -62,8 +58,6 @@ static void	send_char(int pid, int c)
 		usleep(255);
 		bit++;
 	}
-	while (!g_received)
-		usleep(50);
 }
 
 static void	send_message(int pid, char *message)
@@ -78,6 +72,7 @@ static void	send_message(int pid, char *message)
 		i++;
 	}
 	send_char(pid, '\0');
+	usleep(100);
 }
 
 int	main(int ac, char **av)
@@ -86,12 +81,12 @@ int	main(int ac, char **av)
 
 	if (ac != 3)
 	{
-		ft_printf("Usage: %s <server_pid> <message>\n", av[0]);
+		ft_printf("\033[0;31mUsage: %s <server_pid> <message>\n", av[0]);
 		return (1);
 	}
 	if (!is_valid_pid(av[1]))
 	{
-		ft_printf("Error: Invalid PID .\n");
+		ft_printf("\033[0;31mError: Invalid PID .\n");
 		return (1);
 	}
 	sa.sa_handler = handle_acknowledgment;

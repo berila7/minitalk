@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:09 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/07 11:39:31 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/07 14:03:53 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 static t_data	g_data;
 
-static void	reset_state(void)
+static void	reset_state(siginfo_t *info)
 {
-	g_data.pid = 0;
+	g_data.pid = info->si_pid;
 	g_data.received_char = 0;
 	g_data.bit_position = 0;
 	g_data.buffer_pos = 0;
 	g_data.expected_bytes = 0;
-	write(1, "\n", 1);
 }
 
 static int	get_utf8_bytes(unsigned char first_byte)
@@ -60,13 +59,7 @@ static void	handle_signal(int signum, siginfo_t *info, void *context)
 	if (g_data.pid == 0)
 		g_data.pid = info->si_pid;
 	if (info->si_pid != g_data.pid)
-	{
-		g_data.pid = info->si_pid;
-		g_data.received_char = 0;
-		g_data.bit_position = 0;
-		g_data.buffer_pos = 0;
-		g_data.expected_bytes = 0;
-	}
+		reset_state(info);
 	if (signum == SIGUSR1)
 		g_data.received_char |= (1 << g_data.bit_position);
 	g_data.bit_position++;
@@ -75,40 +68,30 @@ static void	handle_signal(int signum, siginfo_t *info, void *context)
 		g_data.bit_position = 0;
 		if (g_data.received_char == '\0')
 		{
-			flush_character();
-			write(1, "\n", 1);
-			reset_state();
 			kill(info->si_pid, SIGUSR1);
-			return ;
+			write(1, "\n", 1);
 		}
 		if (g_data.buffer_pos == 0)
 			g_data.expected_bytes = get_utf8_bytes(g_data.received_char);
 		g_data.byte_buffer[g_data.buffer_pos++] = g_data.received_char;
 		if (g_data.buffer_pos >= g_data.expected_bytes)
 			flush_character();
-		kill(info->si_pid, SIGUSR1);
 		g_data.received_char = 0;
 	}
 }
 
-int	main(int ac, char **av)
+int	main(void)
 {
 	struct sigaction	sa;
 
-	(void)av;
-	if (ac != 1)
-	{
-		ft_printf("one argument allowed\n");
-		return (1);
-	}
-	reset_state();
-	ft_printf("Server PID: %d\n", getpid());
+	ft_printf("\033[0;32mServer PID: %d\n\033[0;37m", getpid());
 	sa.sa_sigaction = handle_signal;
+	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_SIGINFO;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1
 		|| sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
-		ft_printf("Error setting up signal handler\n");
+		ft_printf("\033[0;31mError setting up signal handler\n");
 		exit(1);
 	}
 	while (1)
