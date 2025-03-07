@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:45:41 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/04 15:04:20 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/05 12:49:51 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,14 @@ static void	handle_signal(int signum, siginfo_t *info, void *context)
 	}
 }
 
-int	main(void)
+int	main(int ac, char **av)
 {
+	(void)av;
+	if (ac != 1)
+	{
+		ft_printf("one argument allowed\n");
+		return (1);
+	}
 	struct sigaction	sa;
 
 	sa.sa_sigaction = handle_signal;
