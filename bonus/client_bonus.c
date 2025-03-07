@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:13 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/05 13:30:34 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/07 11:27:02 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static void	handle_acknowledgment(int signum)
 	g_received = 1;
 	ft_printf("Message received by server!\n");
 }
-
 
 static void	send_char(int pid, int c)
 {

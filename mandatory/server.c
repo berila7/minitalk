@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:45:41 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/05 12:49:51 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/07 11:27:57 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static t_data	g_data;
 static void	handle_signal(int signum, siginfo_t *info, void *context)
 {
 	(void)context;
-
 	if (g_data.pid == 0)
 		g_data.pid = info->si_pid;
 	if (info->si_pid != g_data.pid)
@@ -43,14 +42,14 @@ static void	handle_signal(int signum, siginfo_t *info, void *context)
 
 int	main(int ac, char **av)
 {
+	struct sigaction	sa;
+
 	(void)av;
 	if (ac != 1)
 	{
 		ft_printf("one argument allowed\n");
 		return (1);
 	}
-	struct sigaction	sa;
-
 	sa.sa_sigaction = handle_signal;
 	sa.sa_flags = SA_SIGINFO;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)

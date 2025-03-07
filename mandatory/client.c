@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 16:46:32 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/04 14:45:38 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/07 11:28:53 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int ac, char *av[])
 	}
 	if (!is_valid_pid(av[1]))
 	{
-		ft_printf("Error: Invalid PID format. PID must be a positive number.\n");
+		ft_printf("Error: Invalid PID format.\n");
 		return (1);
 	}
 	message = av[2];

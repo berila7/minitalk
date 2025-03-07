@@ -6,7 +6,7 @@
 /*   By: mberila <mberila@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 12:08:48 by mberila           #+#    #+#             */
-/*   Updated: 2025/03/05 14:55:30 by mberila          ###   ########.fr       */
+/*   Updated: 2025/03/07 11:30:49 by mberila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ typedef struct s_data
 	unsigned int	received_char;
 	int				bit_position;
 	pid_t			pid;
-	unsigned char byte_buffer[4];
-    int     buffer_pos;
-    int     expected_bytes;
+	unsigned char	byte_buffer[4];
+	int				buffer_pos;
+	int				expected_bytes;
 }	t_data;
 
 #endif
